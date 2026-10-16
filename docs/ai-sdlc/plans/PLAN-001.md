@@ -5,12 +5,12 @@
 | Plan ID | PLAN-001 |
 | Derived from | `docs/ai-sdlc/specs/SPEC-001.md` (Status: APPROVED — human-approved 2026-10-05) |
 | Intent source | `intent/clinic-appointment-system.md` (Status: approved) |
-| Status | draft — pending human approval (plan-only; authorizes no code/deps/migrations until approved) |
+| Status | APPROVED — human-approved 2026-10-07 |
 | Date | 2026-10-06 |
 | Author | architect |
 
-> **Plan-only gate (binding).** This document authorizes nothing. No Flutter feature code, no
-> dependency installation, no DB schema/migration execution until this plan is human-approved.
+> **Approval gate (binding).** This plan is human-approved and authorizes implementation within its
+> phased scope. Do not implement later-phase behavior early or invent requirements absent from this plan/spec.
 > Smallest change satisfying SPEC-001. Reuse existing resources before adding packages.
 > Supabase-only backend (Auth, PostgreSQL). Storage unused (D-43). No FCM/email provider/Maps/payments.
 > Every phase below carries its own rollback note and test list mapped to acceptance criteria.

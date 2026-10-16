@@ -1,30 +1,25 @@
 # AGENTS.md — Clinic Appointment Management System
 
-## What this is
-Flutter (Dart) clinic appointment app for 3 roles: Patient, Doctor, Clinic Administrator.
-Source of truth for scope: `intent/clinic-appointment-system.md` (Status: approved).
+## Project
+- Flutter (Dart) clinic appointment app for Patients, Doctors, and Clinic Administrators.
+- Current status: **Phase 1 complete; Phase 2 — Auth & Profiles active.**
+- Follow the approved implementation plan in `docs/ai-sdlc/plans/PLAN-001.md` strictly. Do not invent, guess, or renumber plan IDs (for example, do not refer to a made-up “PLAN 5”). Refer only to plan files and IDs that actually exist.
+- Do not add requirements, fields, tables, roles, workflows, or behavior not authorized by PLAN-001 and the approved specifications it references. If they conflict or leave a decision open, stop and ask the user before implementing.
 
-## SDLC gate (binding)
-Workflow: Intent → Spec → Plan → Implementation → Testing/Review.
-- Intent is approved. No `spec/` or `plan/` exists yet → **do not write Flutter feature code, do not add dependencies, do not create DB schema/migrations.**
-- Never invent requirements, tables, fields, relationships, auth methods, appointment statuses, or cancellation/rescheduling rules. Open questions are listed in the intent file — clarify, don't assume.
-- Intent interview: ask one question at a time, keep new intents `Status: draft`, never mark approved. Skill: `.agents/skills/intent-interview/SKILL.md`.
+## Mandatory implementation workflow
+1. Break each requested task into small, atomic sub-tasks. Each sub-task must have a clear, independently verifiable outcome.
+2. Implement and validate only the current sub-task. Keep changes limited to its scope.
+3. Stop after each sub-task and require the user to create a Git commit for it. Do not create commits yourself.
+4. Do not start the next sub-task until the user confirms that the current sub-task has been committed.
+5. Follow PLAN-001's phase order, acceptance criteria, architecture, and rollback guidance. Do not implement later-phase work early.
+6. Run the smallest relevant tests and checks for each sub-task before asking the user to commit. Report any unavailable validation clearly.
 
-## Current repo state (verified 2026-10-04)
-- Vanilla `flutter create` counter template: `lib/main.dart` is the demo counter, `test/widget_test.dart` tests it.
-- `pubspec.yaml` has only `cupertino_icons` + `flutter_test`/`flutter_lints`. `flutter_bloc`, `supabase_flutter`, localization, theming deps are **not yet added** — adding them is implementation, blocked until spec+plan approval.
-- `analysis_options.yaml` includes `package:flutter_lints/flutter.yaml`. Verify with `flutter analyze`.
-- Targets: single codebase, Android + iOS (`android/`, `ios/` present). Web exists as scaffold only; per approved intent Web is primary for Admins (optionally Patients/Doctors) — pending spec.
-- Flutter is **not on PATH** in this environment — locate the SDK before running any command.
+## Architecture and project constraints
+- State management: Bloc/Cubit only. Follow the Clean Architecture and Repository Pattern structure specified in PLAN-001; keep business logic testable and use the approved dependency-injection approach.
+- Backend: Supabase Flutter SDK and the approved Supabase services only. Database schema, migrations, RLS, and seed data must match the approved plan/specification; never infer or invent database requirements.
+- Enforce role and tenant boundaries in the backend, including Supabase RLS. Never trust client-side role or authorization checks as the security boundary.
+- Follow PLAN-001 for supported platforms, localization, theming, responsive behavior, and feature scope. Do not add dependencies or integrations outside its approved scope without user approval and a plan amendment.
 
-## Commands (run in `clinic_appointment_system/`)
-- `flutter pub get` — install deps (after SDK available)
-- `flutter analyze` — lint/typecheck (flutter_lints)
-- `flutter test` — unit/widget tests (keep: unit = business logic, widget = key UI, integration where approved)
-- `flutter run` — dev run; `flutter build apk` / `flutter build ipa` — release builds
-
-## Constraints for future work (from approved intent)
-- State: Bloc/Cubit only. Architecture: Clean Architecture + Repository Pattern + DI, SOLID, testable business logic.
-- Backend only via Supabase Flutter SDK (Auth, PostgreSQL, Storage only if approved requirements need files). Schema derives strictly from approved spec.
-- Roles: Patient (own data only), Doctor (own availability/appointments + relevant patient info), Admin (broader clinic management). Enforce via Supabase Auth + RLS per approved spec.
-- UI (post-spec): Arabic/English localization, light/dark themes, responsive layout.
+## Validation
+- Run the repository's relevant commands from the project root, such as `flutter analyze` and targeted `flutter test` tests, when the Flutter SDK is available.
+- If a required tool or environment is unavailable, state that limitation and do not claim the check passed.
